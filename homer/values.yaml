@@ -166,11 +166,20 @@ configMap:
         icon: "fas fa-cloud"
         items:
           - name: "Jellyfin"
-            subtitle: "Bookmark example"
+            subtitle: "Media Server"
             tag: "app"
             keywords: "jellyfin"
             url: ""
-            target: "_blank noreferrer noopener" # optional html a tag target attribute
+            target: "_blank noreferrer noopener"
+      - name: "Metrics"
+        icon: "fas fa-line-chart"
+        items:
+          - name: "Grafana"
+            subtitle: "Bookmark example"
+            tag: "app"
+            keywords: "grafana"
+            url: "https://k3s-box.local"
+            target: "_blank noreferrer noopener"
   # -- Additional annotations for the config map object.
   annotations: {}
   # -- Additional labels for the config map object.

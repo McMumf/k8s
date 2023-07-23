@@ -4,6 +4,7 @@ Repository for storing k8s related item (i.e., helm charts).
 
 ## Helm Charts
 
+### Rancher
 
 ### Grafana
 
