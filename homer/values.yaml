@@ -1,0 +1,200 @@
+image:
+  # -- The repository to pull the image from.
+  repository: b4bz/homer
+  # -- The docker tag, if left empty chart's appVersion will be used.
+  # @default -- `.Chart.AppVersion`
+  tag: ""
+  # -- The pull policy for the controller.
+  pullPolicy: Always
+
+nameOverride: ""
+fullnameOverride: ""
+
+controller:
+  # -- Create a workload for this chart.
+  enabled: true
+  # -- Type of the workload object.
+  kind: Deployment
+  # -- The number of replicas.
+  replicas: 1
+  # -- Additional annotations for the controller object.
+  annotations: {}
+  # -- Additional labels for the controller object.
+  labels: {}
+
+service:
+  # -- Create a service for exposing this chart.
+  enabled: true
+  # -- The service type used.
+  type: ClusterIP
+  # -- Additional annotations for the service object.
+  annotations: {}
+  # -- Additional labels for the service object.
+  labels: {}
+
+ingressRoute:
+  # -- Create an IngressRoute object for exposing this chart.
+  create: false
+  # -- List of [entry points](https://doc.traefik.io/traefik/routing/routers/#entrypoints) on which the ingress route will be available.
+  entryPoints: []
+  # -- [Matching rule](https://doc.traefik.io/traefik/routing/routers/#rule) for the underlying router.
+  rule: ""
+  # -- List of [middleware objects](https://doc.traefik.io/traefik/routing/providers/kubernetes-crd/#kind-middleware) for the ingress route.
+  middlewares: []
+  # -- Use an existing secret containing the TLS certificate.
+  tlsSecretName: ""
+  # -- Additional annotations for the ingress route object.
+  annotations: {}
+  # -- Additional labels for the ingress route object.
+  labels: {}
+
+certificate:
+  # -- Create an Certificate object for the exposed chart.
+  create: false
+  # -- List of subject alternative names for the certificate.
+  dnsNames: []
+  # -- Name of the secret in which the certificate will be stored. Defaults to the first item in dnsNames.
+  secretName: ""
+  issuerRef:
+    # -- Type of the referenced certificate issuer. Can be "Issuer" or "ClusterIssuer".
+    kind: ClusterIssuer
+    # -- Name of the referenced certificate issuer.
+    name: ""
+  # -- Additional annotations for the certificate object.
+  annotations: {}
+  # -- Additional labels for the certificate object.
+  labels: {}
+
+env:
+  # -- Timezone for the container.
+  - name: TZ
+    value: UTC
+
+ports:
+  http:
+    # -- Enable the port inside the `controller` and `Service` objects.
+    enabled: true
+    # -- The port used as internal port and cluster-wide port if `.service.type` == `ClusterIP`.
+    port: 8080
+    # -- The external port used if `.service.type` == `NodePort`.
+    nodePort: null
+    # -- The protocol used for the service.
+    protocol: TCP
+
+configMap:
+  # -- Create a new config map object.
+  create: true
+  # -- Mount path of the config map object.
+  mountPath: /www/assets
+  # -- Use an existing config map object.
+  existingConfigMap: ""
+  # -- Specify a different key inside config map object.
+  key: config.yml
+  # -- String containing the [configuration of homer](https://github.com/bastienwirtz/homer/blob/main/docs/configuration.md).
+  config: |
+    ---
+    # Homepage configuration
+    # See https://fontawesome.com/v5/search for icons options
+
+    title: "Homelab Dashboard"
+    subtitle: "McMumf"
+    logo: "logo.png"
+    # icon: "fas fa-skull-crossbones" # Optional icon
+
+    header: true
+    footer: '<p>Created with <span class="has-text-danger">❤️</span> with <a href="https://bulma.io/">bulma</a>, <a href="https://vuejs.org/">vuejs</a> & <a href="https://fontawesome.com/">font awesome</a> // Fork me on <a href="https://github.com/bastienwirtz/homer"><i class="fab fa-github-alt"></i></a></p>' # set false if you want to hide it.
+
+    # Optional theme customization
+    theme: default
+    colors:
+      light:
+        highlight-primary: "#3367d6"
+        highlight-secondary: "#4285f4"
+        highlight-hover: "#5a95f5"
+        background: "#f5f5f5"
+        card-background: "#ffffff"
+        text: "#363636"
+        text-header: "#ffffff"
+        text-title: "#303030"
+        text-subtitle: "#424242"
+        card-shadow: rgba(0, 0, 0, 0.1)
+        link: "#3273dc"
+        link-hover: "#363636"
+      dark:
+        highlight-primary: "#3367d6"
+        highlight-secondary: "#4285f4"
+        highlight-hover: "#5a95f5"
+        background: "#131313"
+        card-background: "#2b2b2b"
+        text: "#eaeaea"
+        text-header: "#ffffff"
+        text-title: "#fafafa"
+        text-subtitle: "#f5f5f5"
+        card-shadow: rgba(0, 0, 0, 0.4)
+        link: "#3273dc"
+        link-hover: "#ffdd57"
+
+    # Optional message
+    message:
+      #url: https://b4bz.io
+      style: "is-dark" # See https://bulma.io/documentation/components/message/#colors for styling options.
+      title: "Welcome!"
+      icon: "fa fa-grin"
+      content: "Enjoy the apps while you're here."
+
+    # Optional navbar
+    # links: [] # Allows for navbar (dark mode, layout, and search) without any links
+    links:
+      - name: "Contribute"
+        icon: "fab fa-github"
+        url: "https://github.com/bastienwirtz/homer"
+        target: "_blank" # optional html a tag target attribute
+      - name: "Wiki"
+        icon: "fas fa-book"
+        url: "https://www.wikipedia.org/"
+      # this will link to a second homer page that will load config from additional-page.yml and keep default config values as in config.yml file
+      # see url field and assets/additional-page.yml.dist used in this example:
+      #- name: "another page!"
+      #  icon: "fas fa-file-alt"
+      #  url: "#additional-page"
+
+    # Services
+    # First level array represent a group.
+    # Leave only a "items" key if not using group (group name, icon & tagstyle are optional, section separation will not be displayed).
+    services:
+      - name: "Media"
+        icon: "fas fa-cloud"
+        items:
+          - name: "Jellyfin"
+            subtitle: "Bookmark example"
+            tag: "app"
+            keywords: "jellyfin"
+            url: ""
+            target: "_blank noreferrer noopener" # optional html a tag target attribute
+  # -- Additional annotations for the config map object.
+  annotations: {}
+  # -- Additional labels for the config map object.
+  labels: {}
+
+serviceAccount:
+  # -- Specify the service account used for the controller.
+  name: ""
+
+# -- Pod-level security attributes. More info [here](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context).
+securityContext:
+  # -- Enable validation that the container must run as non-root user
+  runAsNonRoot: true
+  # -- Specify the group ID the application will run as
+  runAsGroup: 1000
+  # -- Specify the user ID the application will run as
+  runAsUser: 1000
+
+# -- Compute resources used by the container. More info [here](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+resources:
+  {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
