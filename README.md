@@ -17,3 +17,7 @@ Charts are adapted from [pascaliske](https://charts.pascaliske.dev/homer).
 
 Charts are adapted from [pascaliske](https://charts.pascaliske.dev/homer).
 
+## Configuring Traefik
+
+Useful: [SSL, Traefik, and OAuth for Rancher! (Google, GitHub, Keycloak, Azure, and more!)](https://www.youtube.com/watch?v=Af7HXhElams)
+
